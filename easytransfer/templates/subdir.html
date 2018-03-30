@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <h3>{{ dirname }}:</h3>
+    <table>
+        <tr>
+            <td>Name</td>
+            <td>Type</td>
+        </tr>
+        {% if subdirlist %}
+        {% for subdir in subdirlist %}
+        <tr>
+            <td><a href="{{ "/uploadsdir/%s/%s/"|format(dirname, subdir) }}">{{ subdir }}</a></td>
+            <td>dir</td>
+        </tr>
+        {% endfor %}
+        {% endif %}
+        {% if filelist %}
+        {% for filename in filelist %}
+        <tr>
+            <td><a href="{{ "/uploads/%s/%s"|format(dirname, filename) }}">{{ filename }}</a></td>
+            <td>file</td>
+        </tr>
+        {% endfor %}
+        {% endif %}
+    </table>
+</body>
+</html>

@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>My Local Easy Transfer</title>
+</head>
+<body>
+    <header><h1>My Local Easy Transfer</h1></header>
+    <h3>Leave Message:</h3>
+    <form action="{{url_for('index')}}" method="POST">
+        <p><textarea name="message" placeholder="input message" style="width:250px;height:150px;" required></textarea></p>
+        <p><button type="submit">Send Message</button></p>
+    </form>
+    <h3>Upload file</h3>
+    <form action="{{url_for('index')}}" enctype="multipart/form-data" method="POST">
+        <p>
+            <input type="file" name="file" value="select file" required >
+            <p><button type="submit">Upload</button></p>
+        </p>
+    </form>
+    <div id="showmsgs">
+        <h3>Show Messages:</h3>
+        <form action="{{url_for('clearmsg')}}" method="GET">
+            <button type="submit" name="clrmsg">Clear all messages</button>
+        </form>
+        {% if msgs %}
+        <ol>
+            {% for msg in msgs %}
+            <li>{{ msg }}</li>
+            {% endfor %}
+        </ol>
+        {% else %}
+        <p>Cleared.There isn't any messages.</p>
+        {% endif %}
+    </div>
+    <div id="show-uploaded-files">
+        <h3>Uploaded Files List:</h3>
+        <form action="{{url_for('clearuploaded')}}" method="GET">
+                <button type="submit" name="clruploaded">Clear all messages</button>
+        </form>
+        <table>
+            <tr>
+                <td>Name</td>
+                <td>Type</td>
+            </tr>
+            {% if subdirlist %}
+            {% for subdir in subdirlist %}
+            <tr>
+                <td><a href="{{ "/uploadsdir/%s/"|format(subdir) }}">{{ subdir }}</a></td>
+                <td>dir</td>
+            </tr>
+            {% endfor %}
+            {% endif %}
+            {% if filelist %}
+            {% for filename in filelist %}
+            <tr>
+                <td><a href="{{ "/uploads/%s"|format(filename) }}">{{ filename }}</a></td>
+                <td>file</td>
+            </tr>
+            {% endfor %}
+            {% endif %}
+        </table>
+
+    </div>
+</body>
+</html>
