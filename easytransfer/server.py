@@ -1,5 +1,6 @@
 import datetime
 import os
+import sys
 import shutil
 
 from flask import Flask
@@ -11,6 +12,7 @@ from flask import flash
 from flask import send_from_directory
 from werkzeug.utils import secure_filename
 
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from config import UPLOAD_FOLDER
 from config import SERVER_HOST
 from config import SERVER_PORT
@@ -60,11 +62,13 @@ def write_msg_cache(msgs,max_msg=MAX_MSG):
         f.writelines('\n'.join(msgs))
 
 def message(msgs,msg):
+    """handle messages, put new message on the top"""
     msgs.insert(0,msg)
     write_msg_cache(msgs)
 
 @app.route('/clrmsg')
 def clearmsg():
+    """clear all messages in cache"""
     try:
         os.remove(msg_cache)
     except FileNotFoundError:
@@ -72,6 +76,7 @@ def clearmsg():
     return redirect(url_for('index'))
 
 def upload_file():
+    """handle uploading file"""
     # check if the post request has the file part
     if 'file' not in request.files:
         flash('No file part')
@@ -90,22 +95,29 @@ def upload_file():
 
 @app.route('/uploads/<path:filename>')
 def uploaded_file(filename):
+    """download file by filename url"""
     return send_from_directory(app.config['UPLOAD_FOLDER'],
                                filename,
                                as_attachment=True)
 
 @app.route('/uploadsdir/<path:dirname>/')
 def uploaded_dir(dirname):
+    """handle subdir in uploadsdir"""
     dirpath = os.path.join(UPLOAD_FOLDER, dirname)
     _, subdirlist, filelist = next(os.walk(dirpath))
-    return render_template('subdir.html', dirname=dirname, subdirlist=subdirlist, filelist=filelist)
+    return render_template('subdir.html', 
+                            dirname=dirname, 
+                            subdirlist=subdirlist, 
+                            filelist=filelist)
 
 def allowed_file(filename):
+    """check the file type of upload"""
     return '.' in filename and \
            filename.rsplit('.', 1)[1].lower() not in FORBIDEN_EXTENSIONS
     
 @app.route('/clruploaded')
 def clearuploaded():
+    """remove all uploaded files from the uploaded dir"""
     try:
         shutil.rmtree(UPLOAD_FOLDER)
         os.mkdir(UPLOAD_FOLDER)
@@ -114,7 +126,11 @@ def clearuploaded():
     return redirect(url_for('index'))
 
 if __name__ == '__main__':
+
     app.secret_key = 'super secret key'
     # app.debug = True
-    app.run(host=SERVER_HOST, port=SERVER_PORT, threaded=True)
+    try:
+        app.run(host=SERVER_HOST, port=SERVER_PORT, threaded=True)
+    except OSError:
+        pass
 

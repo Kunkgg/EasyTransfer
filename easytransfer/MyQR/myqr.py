@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 import os
-from MyQR.mylibs import theqrmodule
+from .mylibs import theqrmodule
 from PIL import Image
    
 # Positional parameters
@@ -49,7 +49,7 @@ def run(words, version=1, level='H', picture=None, colorized=False, contrast=1.0
     
         
     def combine(ver, qr_name, bg_name, colorized, contrast, brightness, save_dir, save_name=None):
-        from MyQR.mylibs.constant import alig_location
+        from .mylibs.constant import alig_location
         from PIL import ImageEnhance, ImageFilter
         
         qr = Image.open(qr_name)

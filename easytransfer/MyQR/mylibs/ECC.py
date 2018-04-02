@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from MyQR.mylibs.constant import GP_list, ecc_num_per_block, lindex, po2, log
+from .constant import GP_list, ecc_num_per_block, lindex, po2, log
  
 #ecc: Error Correction Codewords
 def encode(ver, ecl, data_codewords):
@@ -13,7 +13,7 @@ def encode(ver, ecl, data_codewords):
 def get_ecc(dc, ecc_num):
     gp = GP_list[ecc_num]
     remainder = dc
-    for i in range(len(dc)):
+    for _ in range(len(dc)):
         remainder = divide(remainder, *gp)
     return remainder
     

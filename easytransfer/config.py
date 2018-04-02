@@ -1,5 +1,6 @@
+
 # the upload dir
-UPLOAD_FOLDER = './uploads'
+UPLOAD_FOLDER = '/home/gk07/tmp/easytransfer'
 # flask server host
 SERVER_HOST = '0.0.0.0'
 # flask server port
