@@ -1,7 +1,7 @@
 # coding:utf-8
 import os
 import sys
-sys.path.insert(0, os.path.abspath('.'))
+# sys.path.insert(0, os.path.abspath('.'))
 # import config
 import shutil
 import time
@@ -26,13 +26,13 @@ logging.basicConfig(
 @click.group()
 def cli():
     """easytransfer"""
-    lauch_server()
+    
 
 @cli.command('f')
 @click.argument('srcf_path')
 def trans_file(srcf_path):
     """transfer file by local file path"""
-    
+    lauch_server()
     filepath = cp_file_to_tmpdir(srcf_path, dstdir=UPLOAD_FOLDER)
     if filepath:
         key_strs = make_key_strs(filepath)
@@ -43,7 +43,7 @@ def trans_file(srcf_path):
 @click.argument('message')
 def trans_message(message):
     """transfer message"""
-    # lauch_server()
+    lauch_server()
     url = 'http://{}:{}/'.format(SERVER_HOST, SERVER_PORT)
     data = {'message': message}
     res = requests.post(url,data=data)
@@ -57,7 +57,7 @@ def trans_message(message):
 @cli.command('h')
 def open_index():
     """show index page cqcode"""
-    # lauch_server()
+    lauch_server()
     key_strs = make_key_strs()
     generate_cqcode(key_strs)
 
@@ -97,13 +97,6 @@ def lauch_server():
         subprocess.Popen(['python', server.__file__])
     except OSError:
         pass
-    # try:
-    #     p =  multiprocessing.Process(
-    #         target=server.app.run, 
-    #         args=(SERVER_HOST, SERVER_PORT))
-    #     p.start()
-    # except OSError :
-    #     pass
 
 def make_key_strs(filepath=None):
     """make the URL string"""
